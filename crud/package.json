@@ -1,0 +1,14 @@
+{
+  "name": "ec021_sistemas_distribuidos",
+  "version": "1.0.0",
+  "description": "aula02",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "restify": "^8.0.0"
+  }
+}
