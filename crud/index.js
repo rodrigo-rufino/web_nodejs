@@ -1,86 +1,144 @@
 var restify = require("restify");
 
-var arrDolly = [];
+var mysql = require("mysql");
 
-function insertDolly(req, res, next){
-	var dolly = {
-		id: arrDolly.length,
+var arrToddy = [];
+
+var con = {
+	host: 'localhost',
+	port: 3306,
+	user: 'root',
+	password: 'root',
+	database: 'ec021'
+}
+
+function insertToddy(req, res, next){
+	var toddy = {
+		id: arrToddy.length,
 		lote: req.body.lote,
 		conteudo: req.body.conteudo,
 		validade: req.body.validade
 	}
 	
-	if ( dolly && dolly != null ) {
-		arrDolly.push(dolly);
-		res.send(201, dolly);
-	} else
-		res.send(400, "Erro");
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = "INSERT INTO toddy (lote, conteudo, validade)" +
+					"VALUE ('" +
+					toddy.lote + "', '" +
+					toddy.conteudo + "', '" +
+					toddy.validade + "');";
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			res.json(rows);
+		} else {
+			res.json(err);
+		}
+	});
 	
+	connection.end();
     next();
 }
 
 
-function updateDolly(req, res, next){
-	var dolly = {
+function updateToddy(req, res, next){
+
+	console.log("Update Toddy.")
+	
+	var toddy = {
 		id: req.body.id,
 		lote: req.body.lote,
 		conteudo: req.body.conteudo,
 		validade: req.body.validade
 	}
+
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = 	"UPDATE toddy SET" +
+					" lote = '" 		+ toddy.lote +
+					"', conteudo = '" 	+ toddy.conteudo +
+					"', validade = '" 	+ toddy.validade +
+					"' WHERE id = '" 	+ toddy.id + "';";
 	
-	if (dolly && dolly != null){
-		arrDolly[dolly.id] = dolly;
-		res.send(201, arrDolly[dolly.id]);
-	} else {
-		res.send(400, "Erro");
-	}
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			res.json(rows);
+		} else {
+			res.json(err);
+		}
+	});
+
+	connection.end();
 	
     next();
 }
 
 
-function getDolly(req, res, next) {
-	var dolly = {
-		id: req.query.id
-	}
+function getToddy(req, res, next) {
 
-	if (dolly && dolly != null){
-		res.send(201, arrDolly[dolly.id])
-	} else {
-		res.send(400, "Erro");
-	}
+	console.log("Get Toddy.")
 
-	next();
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = 	"SELECT * FROM toddy;";
+	
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			res.json(rows);
+		} else {
+			res.json(err);
+		}
+	});
+
+	connection.end();
+	
+    next();
 }
 
 
-function deleteDolly(req, res, next){
-	var dolly = {
-		id: req.query.id
-	}
+function deleteToddy(req, res, next){
+	console.log("Get Toddy.")
+
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = 	"DELETE FROM toddy WHERE id = '" + req.body.id + "';";
 	
-	if (dolly && dolly != null){
-		arrDolly[dolly.id] = [];
-		res.send(201, arrDolly[dolly.id]);
-	} else {
-		res.send(400, "Erro");
-	}
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			res.json(rows);
+		} else {
+			res.json(err);
+		}
+	});
+
+	connection.end();
 	
     next();
 }
 
 
 var server = restify.createServer({
-    name: 'Dollynho'
+    name: 'Toddynho'
 });
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
 
-server.post("/save", insertDolly);
-server.get("/get", getDolly);
-server.put("/update", updateDolly);
-server.del("/delete", deleteDolly);
+server.post("/save", insertToddy);
+server.get("/get", getToddy);
+server.put("/update", updateToddy);
+server.del("/delete", deleteToddy);
 
 var port = process.env.PORT || 5000;
 
