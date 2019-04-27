@@ -103,9 +103,71 @@ function getToddy(req, res, next) {
     next();
 }
 
+function getToddyExpirationDate(req, res, next) {
+
+	console.log("Get Toddy.")
+
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = 	"SELECT * FROM toddy;";
+	
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			var val = [];
+			for (i = 0; i< rows.length; i++){
+				var parts =rows[i].validade.split('/');
+				var mydate = new Date(parts[2], parts[1] - 1, parts[0]); 
+
+				if (mydate <= Date.now()){
+					val = [...val, rows[i]];
+				}
+			}
+			res.json(val);
+		} else {
+			res.json(err);
+		}
+	});
+
+	connection.end();
+	
+    next();
+}
+
+
+function getToddyId(req, res, next) {
+
+	console.log("Get Toddy Id.")
+
+	var toddy = {
+		id: req.query.id
+	}
+
+	var connection = mysql.createConnection(con);
+	connection.connect();
+
+	var strQuery = 	"SELECT * FROM toddy WHERE id = " + toddy.id +";";
+	
+	console.log(strQuery);
+
+	connection.query(strQuery, function(err, rows, fields){
+		if (!err) {
+			res.json(rows);
+		} else {
+			res.json(err);
+		}
+	});
+
+	connection.end();
+	
+    next();
+}
+
 
 function deleteToddy(req, res, next){
-	console.log("Get Toddy.")
+	console.log("Delete Toddy.")
 
 	var connection = mysql.createConnection(con);
 	connection.connect();
@@ -137,6 +199,8 @@ server.use(restify.plugins.queryParser());
 
 server.post("/save", insertToddy);
 server.get("/get", getToddy);
+server.get("/getExpiration", getToddyExpirationDate)
+server.get("/getId", getToddyId);
 server.put("/update", updateToddy);
 server.del("/delete", deleteToddy);
 
