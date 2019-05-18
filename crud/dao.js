@@ -23,7 +23,8 @@ module.exports = {
         
             connection.query(strQuery, function(err, rows, fields){
                 if (!err) {
-                    resolve(rows);
+                    toddy.id = rows.insertId;
+                    resolve(toddy);
                 } else {
                     reject(err);
                 }
@@ -47,7 +48,7 @@ module.exports = {
         
             connection.query(strQuery, function(err, rows, fields){
                 if (!err) {
-                    resolve(rows);
+                    resolve(toddy);
                 } else {
                     reject(err);
                 }
