@@ -31,8 +31,13 @@ function updateToddy(req, res, next){
 		validade: req.body.validade
 	}
 
-	dao.updateToddy(toddy);
-	res.json(toddy);
+	dao.updateToddy(toddy)
+		.then( (daoRes) => {
+			res.json(daoRes);
+		})
+		.catch( (daoRes) => {
+			res.json(daoRes);
+		});
 	
     next();
 }
@@ -42,7 +47,13 @@ function getToddy(req, res, next) {
 
 	console.log("Get Toddy.")
 	
-	dao.getToddy();
+	dao.getToddy()
+		.then( (daoRes) => {
+			res.json(daoRes);
+		})
+		.catch( (daoRes) => {
+			res.json(daoRes);
+		});
 
     next();
 }
@@ -51,7 +62,13 @@ function getToddyExpirationDate(req, res, next) {
 
 	console.log("Get Toddy Expiration Date.");
 
-	dao.getToddyExpirationDate();
+	dao.getToddyExpirationDate()
+		.then( (daoRes) => {
+			res.json(daoRes);
+		})
+		.catch( (daoRes) => {
+			res.json(daoRes);
+		});
 	
     next();
 }
@@ -65,7 +82,13 @@ function getToddyId(req, res, next) {
 		id: req.query.id
 	}
 
-	dao.getToddyId(toddy);
+	dao.getToddyId(toddy)
+		.then( (daoRes) => {
+			res.json(daoRes);
+		})
+		.catch( (daoRes) => {
+			res.json(daoRes);
+		});
 
     next();
 }
@@ -74,9 +97,15 @@ function getToddyId(req, res, next) {
 function deleteToddy(req, res, next){
 	console.log("Delete Toddy.")
 
-	var toddy = req.body.id;
+	var toddy = req.query.id;
 
-	dao.deleteToddy(toddy);
+	dao.deleteToddy(toddy)
+		.then( (daoRes) => {
+			res.json(daoRes);
+		})
+		.catch( (daoRes) => {
+			res.json(daoRes);
+		});
 	
     next();
 }
