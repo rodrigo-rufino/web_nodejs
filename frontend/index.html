@@ -4,9 +4,8 @@
     </head>
 
     <body>
-        <select name="" id="lote">
-
-        </select>
+        Lote: <select name="" id="lote"></select>
+        <p id = 'itens'></p>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     </body>
@@ -38,5 +37,33 @@
             );
         }
     );
+    //TODO: Criar funcoes de lote no middleware
+    
+    /*
+    $("#lote").change(
+        function(){
+            var lote = $('#lote').val();
+            $.ajax({
+                url: 'http://localhost:5000/toddy/buscarPorLote?lote=' + lote,
+                type: 'GET',
+                    beforeSend: function(){
+                        $('#lote').attr('disabled', true);
+                    },
+                    success: function(result, status, xhr){
+                        $.each(result, function(i, toddy){
+                            $('#itens').append(`ID: ${toddy.id}, Validade: ${toddy.validade}, Conteúdo: ${toddy.conteudo}<br><br>`)
+                        });
+                    },
+                    error: function(){
+
+                    },
+                    complete: function(){
+                        $('#lote').attr('disabled', false);
+                    }
+            }
+
+            );
+        }
+    )*/
 
 </script>
