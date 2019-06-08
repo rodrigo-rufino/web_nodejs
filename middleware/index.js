@@ -1,5 +1,12 @@
 var restify = require("restify");
 var dao = require("./dao");
+var corsMiddleware = require("restify-cors-middleware");
+
+const cors = corsMiddleware({
+	origins: ["*"],
+	allowHeaders: ["API-Token"],
+	exposeHeaders: ["API-Token-Expiry"]
+});
 
 function insertToddy(req, res, next){
 	var toddy = {
@@ -124,12 +131,15 @@ function generateLog(req, res, next){
 }
 //server.use(generateLog)
 
-server.post("/save", insertToddy);
-server.get("/get", getToddy);
-server.get("/getExpiration", getToddyExpirationDate)
-server.get("/getId", getToddyId);
-server.put("/update", updateToddy);
-server.del("/delete", deleteToddy);
+server.pre(cors.preflight);
+server.use(cors.actual);
+
+server.post("/toddy/save", insertToddy);
+server.get("/toddy/get", getToddy);
+server.get("/toddy/getExpiration", getToddyExpirationDate)
+server.get("/toddy/getId", getToddyId);
+server.put("/toddy/update", updateToddy);
+server.del("/toddy/delete", deleteToddy);
 
 var port = process.env.PORT || 5000;
 

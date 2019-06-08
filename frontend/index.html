@@ -1,0 +1,42 @@
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <select name="" id="lote">
+
+        </select>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    </body>
+</html>
+
+<script>
+    $(document).ready(
+        function(){
+            $.ajax(
+                {
+                    url: 'http://localhost:5000/toddy/get',
+                    type: 'GET',
+                    beforeSend: function(){
+
+                    },
+                    success: function(result, status, xhr){
+                        $.each(result, function(i, elemento){
+                            console.log();
+                            $('#lote').append(`<option value = "${elemento.lote}">${elemento.lote}</option>`);
+                        });
+                    },
+                    error: function(){
+                        alert('Deu ruim.');
+                    },
+                    complete: function(){
+                        
+                    }
+                }
+            );
+        }
+    );
+
+</script>
